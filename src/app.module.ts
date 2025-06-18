@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthenticateController } from './controllers/authenticate.controller';
 import { CreateAccountControler } from './controllers/create-account.controller';
 import { CreateQuestionController } from './controllers/create-question.controller';
+import { FetchRecentQuestionsController } from './controllers/fetch-recent-questions.controller';
 import { envSchema } from './env';
 import { PrismaService } from './lib/prisma.service';
 
@@ -20,6 +21,7 @@ import { PrismaService } from './lib/prisma.service';
     CreateAccountControler,
     AuthenticateController,
     CreateQuestionController,
+    FetchRecentQuestionsController,
   ],
   providers: [PrismaService],
 })
