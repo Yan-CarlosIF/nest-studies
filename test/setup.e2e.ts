@@ -5,8 +5,6 @@ import { randomUUID } from 'node:crypto';
 
 import { PrismaClient } from '../prisma/generated/prisma/client';
 
-const prisma = new PrismaClient();
-
 function generateUniqueDatabaseURL(schemaId: string) {
   if (!process.env.DATABASE_URL) {
     throw new Error('DATABASE_URL is not set in the environment variables');
@@ -20,13 +18,19 @@ function generateUniqueDatabaseURL(schemaId: string) {
 }
 
 const schemaId = randomUUID();
+const databaseURL = generateUniqueDatabaseURL(schemaId);
+process.env.DATABASE_URL = databaseURL;
+
+const prisma = new PrismaClient();
 
 beforeAll(() => {
-  const databaseURL = generateUniqueDatabaseURL(schemaId);
-
-  process.env.DATABASE_URL = databaseURL;
-
-  execSync('pnpm prisma migrate deploy');
+  execSync(`pnpm prisma db push`, {
+    env: {
+      ...process.env,
+      DATABASE_URL: databaseURL,
+    },
+    stdio: 'inherit',
+  });
 });
 
 afterAll(async () => {
